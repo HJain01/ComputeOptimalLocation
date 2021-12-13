@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputeOptimalLocationService.Repository", "src\ComputeOptimalLocationService.Repository\ComputeOptimalLocationService.Repository.csproj", "{59D46686-46EF-45B2-8B03-02B4A3429E12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputeOptimalLocationService.Web", "src\ComputeOptimalLocationService.Web\ComputeOptimalLocationService.Web.csproj", "{2EF18BD4-DBD3-43F9-93D1-8D407C35F08B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputeOptimalLocationService.Core", "src\ComputeOptimalLocationService.Core\ComputeOptimalLocationService.Core.csproj", "{213B95E6-6CE7-49F8-873C-A9C6C58584F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputeOptimalLocationService.Repository.Test", "test\ComputeOptimalLocationService.Repository.Test\ComputeOptimalLocationService.Repository.Test.csproj", "{EC70BA57-0DD5-43E8-8401-0D807D4EAF55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputeOptimalLocationService.Core.Test", "test\ComputeOptimalLocationService.Core.Test\ComputeOptimalLocationService.Core.Test.csproj", "{3916774B-4890-4A2A-A077-078B94DFD46A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59D46686-46EF-45B2-8B03-02B4A3429E12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D46686-46EF-45B2-8B03-02B4A3429E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D46686-46EF-45B2-8B03-02B4A3429E12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D46686-46EF-45B2-8B03-02B4A3429E12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EF18BD4-DBD3-43F9-93D1-8D407C35F08B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EF18BD4-DBD3-43F9-93D1-8D407C35F08B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EF18BD4-DBD3-43F9-93D1-8D407C35F08B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EF18BD4-DBD3-43F9-93D1-8D407C35F08B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{213B95E6-6CE7-49F8-873C-A9C6C58584F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{213B95E6-6CE7-49F8-873C-A9C6C58584F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{213B95E6-6CE7-49F8-873C-A9C6C58584F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{213B95E6-6CE7-49F8-873C-A9C6C58584F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC70BA57-0DD5-43E8-8401-0D807D4EAF55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC70BA57-0DD5-43E8-8401-0D807D4EAF55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC70BA57-0DD5-43E8-8401-0D807D4EAF55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC70BA57-0DD5-43E8-8401-0D807D4EAF55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3916774B-4890-4A2A-A077-078B94DFD46A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3916774B-4890-4A2A-A077-078B94DFD46A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3916774B-4890-4A2A-A077-078B94DFD46A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3916774B-4890-4A2A-A077-078B94DFD46A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
