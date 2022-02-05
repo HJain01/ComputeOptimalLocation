@@ -1,13 +1,13 @@
-package src
+package model
 
-type location struct {
+type Location struct {
 	Name    string `json:"name"`
 	Address string `json:"address"`
 	City    string `json:"city"`
 	State   string `json:"state"`
 }
 
-type locationVariance struct {
-	Location location `json:"location"`
+type LocationVariance struct {
+	Location Location `json:"location"`
 	Variance float64  `json:"variance"`
 }

@@ -1,8 +1,0 @@
-hash: 9a51c4d12cada65074fefda36706e03a9d1cecbce3c203f59c22cff5621ff1bd
-updated: 2022-01-31T19:02:59.617562-05:00
-imports:
-- name: github.com/onsi/ginkgo
-  version: 5e1988c7277794f18afffc0b7903d6b2ed063a48
-  subpackages:
-  - v2
-testImports: []

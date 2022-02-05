@@ -4,3 +4,5 @@ import:
   version: ^2.1.1
   subpackages:
   - v2
+- package: github.com/onsi/gomega
+  version: ^1.18.1
