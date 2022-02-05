@@ -1,4 +1,4 @@
-package model
+package cmd
 
 type Location struct {
 	Name    string `json:"name"`

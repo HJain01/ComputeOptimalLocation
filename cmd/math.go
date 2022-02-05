@@ -1,15 +1,14 @@
-package computation
+package cmd
 
 import "math"
 import "errors"
-import "compute-optimal-location.com/model"
 
-func computeOptimalLocation(startingLocations []model.Location, endingLocations []model.Location) model.Location {
-	var locationVariances []model.LocationVariance
+func computeOptimalLocation(startingLocations []Location, endingLocations []Location) Location {
+	var locationVariances []LocationVariance
 
 	for _, endingLocation := range endingLocations {
 		var variance = getVariance(endingLocation, startingLocations)
-		var locationVariance = model.LocationVariance{
+		var locationVariance = LocationVariance{
 			Location: endingLocation,
 			Variance: variance,
 		}
@@ -19,7 +18,7 @@ func computeOptimalLocation(startingLocations []model.Location, endingLocations 
 	return getLowestVarianceLocation(locationVariances)
 }
 
-func getVariance(endingLocation model.Location, startingLocations []model.Location) float64 {
+func getVariance(endingLocation Location, startingLocations []Location) float64 {
 	var distances []float64
 
 	for _, startingLocation := range startingLocations {
@@ -29,7 +28,7 @@ func getVariance(endingLocation model.Location, startingLocations []model.Locati
 	return calculateVariances(distances)
 }
 
-func getDistance(startingLocation model.Location, endingLocation model.Location) float64 {
+func getDistance(startingLocation Location, endingLocation Location) float64 {
 	errors.New("not currently implemented")
 	return 0.0
 }
@@ -61,7 +60,7 @@ func calculateSquaredDifference(distances []float64, mean float64) float64 {
 	return totalSquaredDifference
 }
 
-func getLowestVarianceLocation(locationVariances []model.LocationVariance) model.Location {
+func getLowestVarianceLocation(locationVariances []LocationVariance) Location {
 	var lowestVariance = math.MaxFloat64
 	var bestLocation = locationVariances[0].Location
 

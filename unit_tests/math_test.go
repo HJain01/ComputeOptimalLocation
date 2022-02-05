@@ -1,8 +1,7 @@
 package unit_tests
 
 import (
-	. "compute-optimal-location.com/computation"
-	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
