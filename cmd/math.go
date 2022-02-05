@@ -34,22 +34,12 @@ func getDistance(startingLocation Location, endingLocation Location) float64 {
 }
 
 func calculateVariances(distances []float64) float64 {
-	var mean = CalculateMean(distances)
-	var squaredDifference = calculateSquaredDifference(distances, mean)
+	var squaredDifference = calculateSquaredDifference(distances)
 	return squaredDifference / float64(len(distances))
 }
 
-func CalculateMean(distances []float64) float64 {
-	var totalDistance float64 = 0
-
-	for _, distance := range distances {
-		totalDistance += distance
-	}
-
-	return totalDistance / float64(len(distances))
-}
-
-func calculateSquaredDifference(distances []float64, mean float64) float64 {
+func calculateSquaredDifference(distances []float64) float64 {
+	var mean = calculateMean(distances)
 	var totalSquaredDifference = 0.0
 
 	for _, distance := range distances {
@@ -60,11 +50,24 @@ func calculateSquaredDifference(distances []float64, mean float64) float64 {
 	return totalSquaredDifference
 }
 
+func calculateMean(distances []float64) float64 {
+	var totalDistance float64 = 0
+
+	for _, distance := range distances {
+		totalDistance += distance
+	}
+
+	return totalDistance / float64(len(distances))
+}
+
 func getLowestVarianceLocation(locationVariances []LocationVariance) Location {
 	var lowestVariance = math.MaxFloat64
 	var bestLocation = locationVariances[0].Location
 
 	for _, locationVariance := range locationVariances {
+		if locationVariance.Variance < 0.0 {
+			continue
+		}
 		if locationVariance.Variance < lowestVariance {
 			lowestVariance = locationVariance.Variance
 			bestLocation = locationVariance.Location
