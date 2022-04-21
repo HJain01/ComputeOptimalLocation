@@ -1,13 +1,21 @@
 package cmd
 
-import "math"
-import "errors"
+import (
+	"errors"
+	"log"
+	"math"
+)
 
-func computeOptimalLocation(startingLocations []Location, endingLocations []Location) Location {
+func ComputeOptimalLocation(startingLocations []Location, endingLocations []Location) (Location, error) {
 	var locationVariances []LocationVariance
 
 	for _, endingLocation := range endingLocations {
-		var variance = getVariance(endingLocation, startingLocations)
+		variance, err := GetVariance(endingLocation, startingLocations)
+
+		if err != nil {
+			return Location{}, errors.New(err.Error())
+		}
+
 		var locationVariance = LocationVariance{
 			Location: endingLocation,
 			Variance: variance,
@@ -15,31 +23,42 @@ func computeOptimalLocation(startingLocations []Location, endingLocations []Loca
 		locationVariances = append(locationVariances, locationVariance)
 	}
 
-	return getLowestVarianceLocation(locationVariances)
+	return GetLowestVarianceLocation(locationVariances), nil
 }
 
-func getVariance(endingLocation Location, startingLocations []Location) float64 {
+func GetVariance(endingLocation Location, startingLocations []Location) (float64, error) {
 	var distances []float64
 
 	for _, startingLocation := range startingLocations {
-		distances = append(distances, getDistance(startingLocation, endingLocation))
+		distance, err := GetDistance(startingLocation, endingLocation)
+
+		if err != nil {
+			return 0.0, errors.New(err.Error())
+		}
+		distances = append(distances, distance)
+	}
+	log.Println(distances)
+
+	return CalculateVariances(distances), nil
+}
+
+func CalculateTotalDistance(distances []float64) float64 {
+	totalDistance := 0.0
+
+	for _, distance := range distances {
+		totalDistance += distance
 	}
 
-	return calculateVariances(distances)
+	return totalDistance
 }
 
-func getDistance(startingLocation Location, endingLocation Location) float64 {
-	errors.New("not currently implemented")
-	return 0.0
-}
-
-func calculateVariances(distances []float64) float64 {
-	var squaredDifference = calculateSquaredDifference(distances)
+func CalculateVariances(distances []float64) float64 {
+	var squaredDifference = CalculateSquaredDifference(distances)
 	return squaredDifference / float64(len(distances))
 }
 
-func calculateSquaredDifference(distances []float64) float64 {
-	var mean = calculateMean(distances)
+func CalculateSquaredDifference(distances []float64) float64 {
+	var mean = CalculateMean(distances)
 	var totalSquaredDifference = 0.0
 
 	for _, distance := range distances {
@@ -50,7 +69,7 @@ func calculateSquaredDifference(distances []float64) float64 {
 	return totalSquaredDifference
 }
 
-func calculateMean(distances []float64) float64 {
+func CalculateMean(distances []float64) float64 {
 	var totalDistance float64 = 0
 
 	for _, distance := range distances {
@@ -60,7 +79,7 @@ func calculateMean(distances []float64) float64 {
 	return totalDistance / float64(len(distances))
 }
 
-func getLowestVarianceLocation(locationVariances []LocationVariance) Location {
+func GetLowestVarianceLocation(locationVariances []LocationVariance) Location {
 	var lowestVariance = math.MaxFloat64
 	var bestLocation = locationVariances[0].Location
 
