@@ -6,14 +6,14 @@ import (
 	"math"
 )
 
-func ComputeOptimalLocation(startingLocations []Location, endingLocations []Location) (Location, error) {
+func ComputeOptimalLocation(startingLocations []string, endingLocations []string) (string, error) {
 	var locationVariances []LocationVariance
 
 	for _, endingLocation := range endingLocations {
 		variance, err := GetVariance(endingLocation, startingLocations)
 
 		if err != nil {
-			return Location{}, errors.New(err.Error())
+			return "", errors.New(err.Error())
 		}
 
 		var locationVariance = LocationVariance{
@@ -26,7 +26,7 @@ func ComputeOptimalLocation(startingLocations []Location, endingLocations []Loca
 	return GetLowestVarianceLocation(locationVariances), nil
 }
 
-func GetVariance(endingLocation Location, startingLocations []Location) (float64, error) {
+func GetVariance(endingLocation string, startingLocations []string) (float64, error) {
 	var distances []float64
 
 	for _, startingLocation := range startingLocations {
@@ -79,7 +79,7 @@ func CalculateMean(distances []float64) float64 {
 	return totalDistance / float64(len(distances))
 }
 
-func GetLowestVarianceLocation(locationVariances []LocationVariance) Location {
+func GetLowestVarianceLocation(locationVariances []LocationVariance) string {
 	var lowestVariance = math.MaxFloat64
 	var bestLocation = locationVariances[0].Location
 

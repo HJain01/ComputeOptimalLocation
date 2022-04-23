@@ -68,7 +68,7 @@ var _ = Describe("Calculate Functions", func() {
 
 var _ = Describe("Get Lowest Variance Location Function", func() {
 	DescribeTable("Gets the proper lowest variance",
-		func(inputs []LocationVariance, expectedLocation Location) {
+		func(inputs []LocationVariance, expectedLocation string) {
 			mostFairLocation := GetLowestVarianceLocation(inputs)
 
 			Expect(mostFairLocation).To(Equal(expectedLocation))
@@ -76,58 +76,28 @@ var _ = Describe("Get Lowest Variance Location Function", func() {
 		Entry("All Positive Variances",
 			[]LocationVariance{
 				{
-					Location: Location{
-						Name:    "Kyle's House",
-						Address: "123 GLS Street",
-						City:    "Good",
-						State:   "Looking",
-					},
+					Location: "123 GLS Street Good Looking",
 					Variance: 0.0,
 				},
 				{
-					Location: Location{
-						Name:    "Lindsey And Daniel's House",
-						Address: "123 Pet Street",
-						City:    "Lorelei",
-						State:   "Malcolm",
-					},
+					Location: "123 Pet Street Lorelei Malcolm",
 					Variance: 1.0,
 				},
 			},
-			Location{
-				Name:    "Kyle's House",
-				Address: "123 GLS Street",
-				City:    "Good",
-				State:   "Looking",
-			},
+			"123 GLS Street Good Looking",
 		),
 		Entry("Negative Variances are ignored",
 			[]LocationVariance{
 				{
-					Location: Location{
-						Name:    "Kyle's House",
-						Address: "123 GLS Street",
-						City:    "Good",
-						State:   "Looking",
-					},
+					Location: "123 GLS Street Good Looking",
 					Variance: -1.0,
 				},
 				{
-					Location: Location{
-						Name:    "Lindsey And Daniel's House",
-						Address: "123 Pet Street",
-						City:    "Lorelei",
-						State:   "Malcolm",
-					},
+					Location: "123 Pet Street Lorelei Malcolm",
 					Variance: 1.0,
 				},
 			},
-			Location{
-				Name:    "Lindsey And Daniel's House",
-				Address: "123 Pet Street",
-				City:    "Lorelei",
-				State:   "Malcolm",
-			},
+			"123 Pet Street Lorelei Malcolm",
 		),
 	)
 })
