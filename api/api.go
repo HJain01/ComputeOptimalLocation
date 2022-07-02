@@ -24,13 +24,13 @@ func main() {
 		startingLocations, emptyStart := c.GetQueryArray("startingLocations")
 		endingLocations, emptyEnd := c.GetQueryArray("endingLocations")
 
-		if emptyStart || len(startingLocations) == 0 {
+		if emptyStart {
 			c.JSON(400, gin.H{
 				"Bad Request": "You need to supply at least one starting location",
 			})
 		}
 
-		if emptyEnd || len(endingLocations) == 0 {
+		if emptyEnd {
 			c.JSON(400, gin.H{
 				"Bad Request": "You need to supply at least one ending location",
 			})
