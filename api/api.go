@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	cmd "github.com/HJain01/compute-optimal-location/cmd"
+	"github.com/HJain01/compute-optimal-location/cmd"
 	"github.com/gin-gonic/gin"
 )
 
