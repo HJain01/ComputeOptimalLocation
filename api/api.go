@@ -3,16 +3,31 @@ package main
 import (
 	"fmt"
 	"github.com/HJain01/compute-optimal-location/cmd"
+	. "github.com/JosephWoodward/gin-errorhandling/middleware"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 var (
-	NotFoundError   = fmt.Errorf("resource could not be found")
-	BadRequestError = fmt.Errorf("you have not supplied the right arguments \nsupply starting and ending locations")
+	NotFoundError      = fmt.Errorf("resource could not be found")
+	NoDestinationError = fmt.Errorf("you need to supply at least 1 origin")
+	NoOriginError      = fmt.Errorf("you need to supply at least 1 destination")
 )
 
 func main() {
 	r := gin.Default()
+
+	r.Use(
+		ErrorHandler(
+			Map(NoDestinationError, NoOriginError).ToResponse(func(c *gin.Context, err error) {
+				c.Status(http.StatusBadRequest)
+				c.Writer.Write([]byte(err.Error()))
+			}),
+			Map(NotFoundError).ToResponse(func(c *gin.Context, err error) {
+				c.Status(http.StatusNotFound)
+				c.Writer.Write([]byte(err.Error()))
+			}),
+		))
 
 	r.GET("/status", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -24,16 +39,14 @@ func main() {
 		startingLocations, emptyStart := c.GetQueryArray("startingLocations")
 		endingLocations, emptyEnd := c.GetQueryArray("endingLocations")
 
-		if emptyStart {
-			c.JSON(400, gin.H{
-				"Bad Request": "You need to supply at least one starting location",
-			})
+		if emptyEnd {
+			c.Error(NoDestinationError)
+			return
 		}
 
-		if emptyEnd {
-			c.JSON(400, gin.H{
-				"Bad Request": "You need to supply at least one ending location",
-			})
+		if emptyStart {
+			c.Error(NoOriginError)
+			return
 		}
 
 		optimalLocation, err := cmd.ComputeOptimalLocation(startingLocations, endingLocations)
