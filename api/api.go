@@ -16,12 +16,14 @@ func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
-		for _, ginErrors := range c.Errors {
-			switch ginErrors.Err {
+		for _, ginError := range c.Errors {
+			switch ginError.Err {
 			case NoOriginError:
-				c.AbortWithStatusJSON(http.StatusBadRequest, NoOriginError.Error())
+				c.JSON(http.StatusBadRequest, NoOriginError.Error())
 			case NoDestinationError:
-				c.AbortWithStatusJSON(http.StatusBadRequest, NoDestinationError.Error())
+				c.JSON(http.StatusBadRequest, NoDestinationError.Error())
+			default:
+				c.JSON(http.StatusInternalServerError, ginError.Err.Error())
 			}
 		}
 	}
