@@ -7,14 +7,14 @@ image_resource:
     repository: 7factor/env-to-ecs
 
 inputs:
-- name: compute-optimal-location-service-terraform
+  - name: compute-optimal-location-service-terraform
 
 outputs:
-- name: ecs-env-blob
+  - name: ecs-env-blob
 
 run:
   path: sh
   args:
-  - -exc
-  - |
-    /go/bin/cmd -i compute-optimal-location-service-terraform/env/${ENV}/${ENV}.env -o ecs-env-blob/output.json
+    - -exc
+    - |
+      /go/bin/cmd -i compute-optimal-location-service-terraform/env/${ENV}/${ENV}.env -o ecs-env-blob/output.json
