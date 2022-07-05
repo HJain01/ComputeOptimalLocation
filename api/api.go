@@ -3,31 +3,34 @@ package main
 import (
 	"fmt"
 	"github.com/HJain01/compute-optimal-location/cmd"
-	. "github.com/JosephWoodward/gin-errorhandling/middleware"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 var (
-	NotFoundError      = fmt.Errorf("resource could not be found")
-	NoDestinationError = fmt.Errorf("you need to supply at least 1 origin")
-	NoOriginError      = fmt.Errorf("you need to supply at least 1 destination")
+	NoOriginError      = fmt.Errorf("you need to supply at least 1 origin")
+	NoDestinationError = fmt.Errorf("you need to supply at least 1 destination")
 )
+
+func ErrorHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Next()
+
+		for _, ginErrors := range c.Errors {
+			switch ginErrors.Err {
+			case NoOriginError:
+				c.AbortWithStatusJSON(http.StatusBadRequest, NoOriginError.Error())
+			case NoDestinationError:
+				c.AbortWithStatusJSON(http.StatusBadRequest, NoDestinationError.Error())
+			}
+		}
+	}
+}
 
 func main() {
 	r := gin.Default()
 
-	r.Use(
-		ErrorHandler(
-			Map(NoDestinationError, NoOriginError).ToResponse(func(c *gin.Context, err error) {
-				c.Status(http.StatusBadRequest)
-				c.Writer.Write([]byte(err.Error()))
-			}),
-			Map(NotFoundError).ToResponse(func(c *gin.Context, err error) {
-				c.Status(http.StatusNotFound)
-				c.Writer.Write([]byte(err.Error()))
-			}),
-		))
+	r.Use(ErrorHandler())
 
 	r.GET("/status", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -36,20 +39,20 @@ func main() {
 	})
 
 	r.GET("/getOptimalLocation", func(c *gin.Context) {
-		startingLocations, emptyStart := c.GetQueryArray("startingLocations")
-		endingLocations, emptyEnd := c.GetQueryArray("endingLocations")
+		origins, validOrigin := c.GetQueryArray("origins")
+		destinations, validDestination := c.GetQueryArray("destinations")
 
-		if emptyEnd {
-			c.Error(NoDestinationError)
-			return
-		}
-
-		if emptyStart {
+		if !validOrigin {
 			c.Error(NoOriginError)
 			return
 		}
 
-		optimalLocation, err := cmd.ComputeOptimalLocation(startingLocations, endingLocations)
+		if !validDestination {
+			c.Error(NoDestinationError)
+			return
+		}
+
+		optimalLocation, err := cmd.ComputeOptimalLocation(origins, destinations)
 
 		if err != nil {
 			c.Error(err)
