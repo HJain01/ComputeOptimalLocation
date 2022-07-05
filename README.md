@@ -4,7 +4,7 @@
 
 This is the backend api to an app that find the most optimal destination with multiple starting locations.
 You input multiple starting locations and multiple ending locations, and the api will spit out the best destination
-using the variance of the distance between each origin and destination
+using the variance of the time between each origin and destination
 
 ## Running the app
 

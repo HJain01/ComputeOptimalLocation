@@ -6,12 +6,12 @@ import (
 )
 
 var _ = Describe("Calculate Functions", func() {
-	Describe("Total Distance", func() {
+	Describe("Total Time", func() {
 		DescribeTable("Makes proper calculations no matter the input",
-			func(routeDistances []float64, expectedTotalDistance float64) {
-				totalDistance := CalculateTotalDistance(routeDistances)
+			func(routeTimes []float64, expectedTotalTime float64) {
+				totalTime := CalculateTotalTime(routeTimes)
 
-				Expect(totalDistance).To(Equal(expectedTotalDistance))
+				Expect(totalTime).To(Equal(expectedTotalTime))
 			},
 			Entry("All Positive Numbers", []float64{1.0, 2.0, 3.0, 4.0, 5.0}, 15.0),
 			Entry("All Negative Numbers", []float64{-1.0, -2.0, -3.0, -4.0, -5.0}, -15.0),
@@ -36,8 +36,8 @@ var _ = Describe("Calculate Functions", func() {
 
 	Describe("Squared Difference", func() {
 		DescribeTable("Makes proper calculations no matter the input",
-			func(distances []float64, expectedSquaredDifference float64) {
-				squaredDifference := CalculateSquaredDifference(distances)
+			func(times []float64, expectedSquaredDifference float64) {
+				squaredDifference := CalculateSquaredDifference(times)
 
 				Expect(squaredDifference).To(Equal(expectedSquaredDifference))
 			},

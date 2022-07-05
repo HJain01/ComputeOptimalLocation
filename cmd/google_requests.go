@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func GetDistance(startingLocation string, endingLocation string) (float64, error) {
+func GetTime(startingLocation string, endingLocation string) (float64, error) {
 	apiKey := os.Getenv("GOOGLE_API_KEY")
 	client, err := maps.NewClient(maps.WithAPIKey(apiKey))
 	if err != nil {
@@ -25,11 +25,11 @@ func GetDistance(startingLocation string, endingLocation string) (float64, error
 		return 0.0, err
 	}
 
-	var routeDistances []float64
+	var routeTimes []float64
 	for _, legs := range routes[0].Legs {
-		routeDistances = append(routeDistances, float64(legs.Meters))
+		routeTimes = append(routeTimes, float64(legs.Duration))
 	}
 
-	totalDistance := CalculateTotalDistance(routeDistances)
-	return totalDistance, nil
+	totalTime := CalculateTotalTime(routeTimes)
+	return totalTime, nil
 }

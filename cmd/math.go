@@ -27,56 +27,52 @@ func ComputeOptimalLocation(startingLocations []string, endingLocations []string
 }
 
 func GetVariance(endingLocation string, startingLocations []string) (float64, error) {
-	var distances []float64
+	var times []float64
 
 	for _, startingLocation := range startingLocations {
-		distance, err := GetDistance(startingLocation, endingLocation)
+		time, err := GetTime(startingLocation, endingLocation)
 
 		if err != nil {
 			return 0.0, errors.New(err.Error())
 		}
-		distances = append(distances, distance)
+		times = append(times, time)
 	}
-	log.Println(distances)
+	log.Println(times)
 
-	return CalculateVariances(distances), nil
+	return CalculateVariances(times), nil
 }
 
-func CalculateTotalDistance(distances []float64) float64 {
-	totalDistance := 0.0
+func CalculateTotalTime(times []float64) float64 {
+	totalTime := 0.0
 
-	for _, distance := range distances {
-		totalDistance += distance
+	for _, time := range times {
+		totalTime += time
 	}
 
-	return totalDistance
+	return totalTime
 }
 
-func CalculateVariances(distances []float64) float64 {
-	var squaredDifference = CalculateSquaredDifference(distances)
-	return squaredDifference / float64(len(distances))
+func CalculateVariances(times []float64) float64 {
+	var squaredDifference = CalculateSquaredDifference(times)
+	return squaredDifference / float64(len(times))
 }
 
-func CalculateSquaredDifference(distances []float64) float64 {
-	var mean = CalculateMean(distances)
+func CalculateSquaredDifference(times []float64) float64 {
+	var mean = CalculateMean(times)
 	var totalSquaredDifference = 0.0
 
-	for _, distance := range distances {
-		var difference = distance - mean
+	for _, time := range times {
+		var difference = time - mean
 		totalSquaredDifference += math.Pow(difference, 2)
 	}
 
 	return totalSquaredDifference
 }
 
-func CalculateMean(distances []float64) float64 {
-	var totalDistance float64 = 0
+func CalculateMean(times []float64) float64 {
+	var totalTime = CalculateTotalTime(times)
 
-	for _, distance := range distances {
-		totalDistance += distance
-	}
-
-	return totalDistance / float64(len(distances))
+	return totalTime / float64(len(times))
 }
 
 func GetLowestVarianceLocation(locationVariances []LocationVariance) string {
