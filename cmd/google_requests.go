@@ -7,12 +7,13 @@ import (
 	"os"
 )
 
-func GetTime(startingLocation string, endingLocation string) (float64, error) {
+func GetTime(startingLocation string, endingLocation string, time chan float64, potentialError chan error) {
 	apiKey := os.Getenv("GOOGLE_API_KEY")
 	client, err := maps.NewClient(maps.WithAPIKey(apiKey))
 	if err != nil {
+		time <- 0.0
+		potentialError <- err
 		log.Fatalf("fatal error: %s", err)
-		return 0.0, err
 	}
 
 	request := &maps.DirectionsRequest{
@@ -21,8 +22,9 @@ func GetTime(startingLocation string, endingLocation string) (float64, error) {
 	}
 	routes, _, err := client.Directions(context.Background(), request)
 	if err != nil {
+		time <- 0.0
+		potentialError <- err
 		log.Fatalf("fatal error: %s", err)
-		return 0.0, err
 	}
 
 	var routeTimes []float64
@@ -31,5 +33,6 @@ func GetTime(startingLocation string, endingLocation string) (float64, error) {
 	}
 
 	totalTime := CalculateTotalTime(routeTimes)
-	return totalTime, nil
+	time <- totalTime
+	potentialError <- nil
 }

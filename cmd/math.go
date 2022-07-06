@@ -30,7 +30,11 @@ func GetVariance(endingLocation string, startingLocations []string) (float64, er
 	var times []float64
 
 	for _, startingLocation := range startingLocations {
-		time, err := GetTime(startingLocation, endingLocation)
+		c := make(chan float64)
+		errorChan := make(chan error)
+		GetTime(startingLocation, endingLocation, c, errorChan)
+		time := <-c
+		err := <-errorChan
 
 		if err != nil {
 			return 0.0, errors.New(err.Error())
