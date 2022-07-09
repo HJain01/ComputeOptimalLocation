@@ -1,0 +1,104 @@
+---
+# We care when the source, ci/scripts, and ci/tasks code changes.
+resources:
+  - name: compute-optimal-location-service-src
+    type: git
+    source:
+      paths:
+        - src/**
+        - ci/scripts/**
+        - ci/tasks/**
+        - env/Dockerfile
+      branch: main
+      uri: ((git-repositories.compute-optimal-location-service-uri))
+      private_key: ((git-repositories.compute-optimal-location-service-key))
+
+  # We will use this trigger on changes to the terraform directory for
+  # re-deployment of a current artifact. This gets the same source as the
+  # src item above, it just triggers on something different.
+  - name: compute-optimal-location-service-terraform
+    type: git
+    source:
+      paths:
+        - ci/terraform/**
+        - ci/tasks/**
+        - ci/scripts/**
+        - env/**
+      branch: main
+      uri: ((git-repositories.compute-optimal-location-service-uri))
+      private_key: ((git-repositories.compute-optimal-location-service-key))
+
+  - name: compute-optimal-location-service-image
+    type: docker-image
+    source:
+      repository: ((ecr-repositories.compute-optimal-location-service))
+
+groups:
+  - name: deployments
+    jobs:
+      - unit-tests
+      - build-rc
+      - deploy-prod
+
+jobs:
+
+  #####################
+  ##     TESTING     ##
+  #####################
+
+  - name: unit-tests
+    serial_groups: [ staging ]
+    plan:
+      - get: compute-optimal-location-service-src
+        trigger: true
+      - task: unit-tests
+        file: compute-optimal-location-service-src/ci/tasks/unit-tests.yml
+
+  #####################
+  ##     BUILD       ##
+  #####################
+
+  - name: build-rc
+    build_logs_to_retain: 50
+    serial_groups: [ staging ]
+    plan:
+      - get: compute-optimal-location-service-src
+        trigger: true
+        passed: [ unit-tests ]
+      - put: compute-optimal-location-service-image
+        params:
+          cache: true
+          tag_as_latest: false
+          build: compute-optimal-location-service-src
+          dockerfile: compute-optimal-location-service-src/env/Dockerfile
+          additional_tags: compute-optimal-location-service-src/.git/short_ref
+        get_params:
+          skip_download: true
+
+  ##########################
+  ## TERRAFORM DEPLOYMENT ##
+  ##########################
+
+  # A production deploy has everything, so no need to filter based
+  # on terraform or whatever. It's 100% manual.
+  - name: deploy-prod
+    build_logs_to_retain: 50
+    serial_groups: [ prod ]
+    plan:
+      - in_parallel:
+          - get: compute-optimal-location-service-src
+            passed: [ deploy-rc ]
+          - get: compute-optimal-location-service-terraform
+          - get: compute-optimal-location-service-image
+            passed: [ deploy-rc ]
+            params:
+              skip_download: true
+      - put: terraformer-prod
+        params:
+          terraform_source: compute-optimal-location-service-terraform/ci/terraform/prod
+          env_name: compute-optimal-location-service-ecs-prod
+          vars:
+            ecr_tag: compute-optimal-location-service-src/.git/short_ref
+            ecr_uri: ((ecr-repositories.compute-optimal-location-service))
+            deploy_to_account: ((aws.prod-account-id))
+            ecs_env_blob: ecs-env-blob/output.json
