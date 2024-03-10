@@ -32,7 +32,7 @@ func GetVariance(endingLocation string, startingLocations []string) (float64, er
 	for _, startingLocation := range startingLocations {
 		c := make(chan float64)
 		errorChan := make(chan error)
-		GetTime(startingLocation, endingLocation, c, errorChan)
+		GetTravelTime(startingLocation, endingLocation, c, errorChan)
 		time := <-c
 		err := <-errorChan
 
